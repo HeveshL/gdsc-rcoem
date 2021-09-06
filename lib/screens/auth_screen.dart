@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gdsc/screens/otp_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -10,40 +10,6 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _phoneNoController = TextEditingController();
-  bool _loading = false;
-
-  Future signIn() async {
-    FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: "+91${_phoneNoController.text}",
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          // ANDROID ONLY!
-
-          // Sign the user in (or link) with the auto-generated credential
-          await FirebaseAuth.instance.signInWithCredential(credential);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          if (e.code == 'invalid-phone-number') {
-            //TODO: Add toast
-            print('The provided phone number is not valid.');
-          }
-
-          // Handle other errors
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          // Update the UI - wait for the user to enter the SMS code
-          String smsCode = 'xxxx';
-
-          // Create a PhoneAuthCredential with the code
-          PhoneAuthCredential credential = PhoneAuthProvider.credential(
-              verificationId: verificationId, smsCode: smsCode);
-
-          // Sign the user in (or link) with the credential
-          await FirebaseAuth.instance.signInWithCredential(credential);
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          // Auto-resolution timed out...
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +66,14 @@ class _AuthScreenState extends State<AuthScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                      await signIn();
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => OtpScreen(
+                            phoneNo: int.parse(_phoneNoController.text),
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       height: 50,
@@ -117,24 +89,15 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ],
                       ),
-                      child: Center(
-                        child: _loading
-                            ? const SizedBox(
-                                height: 15,
-                                width: 15,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.cyan,
-                                ),
-                              )
-                            : const Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  // fontFamily: "Nunito",
-                                  color: Colors.white,
-                                ),
-                              ),
+                      child: const Center(
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 15,
+                            // fontFamily: "Nunito",
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),

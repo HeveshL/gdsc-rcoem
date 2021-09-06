@@ -52,7 +52,7 @@ class AuthHandler extends StatelessWidget {
         // TODO: Add loading logic
         // If user is not Logged in
         else {
-          return const ErrorScreen();
+          return const AuthScreen();
         }
       },
     );
