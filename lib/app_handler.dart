@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gdsc/screens/auth_screen.dart';
+import 'package:gdsc/screens/error_screen.dart';
 import 'package:gdsc/screens/home_screen.dart';
 
 class AppHandler extends StatelessWidget {
@@ -20,7 +21,7 @@ class AppHandler extends StatelessWidget {
           // Check for errors
           if (snapshot.hasError) {
             // TODO: Make Error Screen
-            return const Text("Something went wrong");
+            return const ErrorScreen();
           }
 
           // Once complete, show your application
@@ -51,7 +52,7 @@ class AuthHandler extends StatelessWidget {
         // TODO: Add loading logic
         // If user is not Logged in
         else {
-          return const AuthScreen();
+          return const ErrorScreen();
         }
       },
     );
