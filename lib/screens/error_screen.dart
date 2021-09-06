@@ -6,9 +6,9 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Center(
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -18,13 +18,13 @@ class ErrorScreen extends StatelessWidget {
                 child: SvgPicture.asset("assets/images/error.svg"),
               ),
               const Text(
-                                "OOPS something went wrong!",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  // fontFamily: "Nunito",
-                                  color: Colors.black,
-                                ),
-                              ),
+                "OOPS something went wrong!",
+                style: TextStyle(
+                  fontSize: 20,
+                  // fontFamily: "Nunito",
+                  color: Colors.black,
+                ),
+              ),
             ],
           ),
         ),

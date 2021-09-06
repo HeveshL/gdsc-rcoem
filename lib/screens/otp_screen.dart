@@ -20,7 +20,11 @@ class _OtpScreenState extends State<OtpScreen> {
         // ANDROID ONLY!
 
         // Sign the user in (or link) with the auto-generated credential
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        await FirebaseAuth.instance.signInWithCredential(credential).then(
+          (value) {
+            if (value.user != null) Navigator.of(context).pop();
+          },
+        );
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
@@ -45,28 +49,36 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              OTPTextField(
-                length: 6,
-                width: double.infinity,
-                style: const TextStyle(fontSize: 17),
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                onCompleted: (value) async {
-                  final PhoneAuthCredential credential =
-                      PhoneAuthProvider.credential(
-                    verificationId: _vId,
-                    smsCode: value,
-                  );
-                  await FirebaseAuth.instance.signInWithCredential(credential);
-                },
-              ),
-            ],
+    return SafeArea(
+      child: Scaffold(
+        body: SizedBox.expand(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OTPTextField(
+                  length: 6,
+                  width: double.infinity,
+                  style: const TextStyle(fontSize: 17),
+                  textFieldAlignment: MainAxisAlignment.spaceAround,
+                  onCompleted: (value) async {
+                    final PhoneAuthCredential credential =
+                        PhoneAuthProvider.credential(
+                      verificationId: _vId,
+                      smsCode: value,
+                    );
+                    await FirebaseAuth.instance
+                        .signInWithCredential(credential)
+                        .then(
+                      (value) {
+                        if (value.user != null) Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
