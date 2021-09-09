@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gdsc/services/toast_service.dart';
 import 'package:otp_text_field/otp_text_field.dart';
+import 'package:otp_text_field/style.dart';
 
 class OtpScreen extends StatefulWidget {
   final int phoneNo;
@@ -22,7 +24,10 @@ class _OtpScreenState extends State<OtpScreen> {
         // Sign the user in (or link) with the auto-generated credential
         await FirebaseAuth.instance.signInWithCredential(credential).then(
           (value) {
-            if (value.user != null) Navigator.of(context).pop();
+            if (value.user != null) {
+              Navigator.of(context).pop();
+              showTextToast("Login Successful!");
+            }
           },
         );
       },
@@ -43,7 +48,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
-    // _sendCode();
+    _sendCode();
     super.initState();
   }
 
@@ -51,16 +56,46 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: SizedBox.expand(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Row(
+                  children: const [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Enter OTP:',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                      height: 20,
+                    ),
                 OTPTextField(
+                  fieldStyle: FieldStyle.box,
+                  otpFieldStyle: OtpFieldStyle(
+                    borderColor: Colors.white,
+                    backgroundColor: Colors.white,
+                    disabledBorderColor: Colors.white,
+                    enabledBorderColor: Colors.white,
+                    errorBorderColor: Colors.white,
+                    focusBorderColor: Colors.white,
+                  ),
+                  fieldWidth: 40,
+                  margin: EdgeInsets.zero,
+                  outlineBorderRadius: 8,
                   length: 6,
                   width: double.infinity,
-                  style: const TextStyle(fontSize: 17),
+                  style: const TextStyle(fontSize: 14),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   onCompleted: (value) async {
                     final PhoneAuthCredential credential =
@@ -72,7 +107,10 @@ class _OtpScreenState extends State<OtpScreen> {
                         .signInWithCredential(credential)
                         .then(
                       (value) {
-                        if (value.user != null) Navigator.of(context).pop();
+                        if (value.user != null) {
+                          Navigator.of(context).pop();
+                          showTextToast("Login Successful!");
+                        }
                       },
                     );
                   },
