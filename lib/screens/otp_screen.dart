@@ -43,7 +43,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
-    _sendCode();
+    // _sendCode();
     super.initState();
   }
 
